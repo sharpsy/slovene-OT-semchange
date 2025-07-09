@@ -10,13 +10,14 @@ We critically analyze the widely used *Average Pairwise Distance (APD)* metric a
 
 ## Dataset
 
-The dataset **"Semantic change detection datasets for Slovenian 1.0"** is publicly available via the [CLARIN.SI repository](http://hdl.handle.net/11356/1651). It includes:
+The **"Semantic change detection datasets for Slovenian 1.0"**, available via [CLARIN.SI](http://hdl.handle.net/11356/1651), is the first dataset for evaluating semantic change detection in Slovene. It includes:
 
-* 104 manually selected and annotated target words
-* Over 3,000 sentence pairs from two historical periods
-* Human-annotated semantic change scores
+* **Source corpus** (`gigafida_to_1997_vs_2018.tsv`): Texts from the Gigafida 2.0 corpus, split into two time periods (1997 or earlier, and 2018), useful for training or embedding extraction.
+* **Annotated sentence pairs** (`word_usage_annotations_1997_2018.tsv`): 3,150 sentence pairs (30 per time period) for 105 target words, manually rated by 3 annotators on a 1–4 semantic similarity scale.
+* **Gold standard scores** (`semantic_shift_scores.tsv`): Aggregated semantic change scores for 104 words, used as ground truth for system evaluation.
+* **Annotation guidelines** (`RSDO_semanticni-premiki_navodila_v0.pdf`): Instructions for human annotation (in Slovene).
 
-Detailed information on data collection, annotation, and validation is provided in the paper.
+The dataset provides a reliable benchmark for tracking and evaluating semantic change in a less-resourced language. Detailed information on data collection, annotation, and validation is provided in the paper.
 
 ## Repository Structure and Code Overview
 
