@@ -1,53 +1,108 @@
-# Semantic Change Detection for Slovene Language
+# Tracking Semantic Change in Slovene
 
-Welcome to the repository containing the code to reproduce results for the paper "Semantic change detection for Slovene language: a novel dataset and an approach based on optimal transport". This repository provides the necessary resources to reproduce the findings of our study, as outlined in our paper available at [arXiv](https://arxiv.org/abs/2402.16596).
+This repository contains the code and resources for the paper **"Tracking Semantic Change in Slovene: A Novel Dataset and Optimal Transport-Based Distance"**, available on [arXiv](https://arxiv.org/abs/2402.16596v2).
 
 ## Abstract
 
-In this paper, we focus on the detection of semantic changes in Slovene, a less resourced Slavic language with two million speakers. Detecting and tracking semantic changes provides insights into the evolution of the language caused by changes in society and culture. Recently, several systems have been proposed to aid in this study, but all depend on manually annotated gold standard datasets for evaluation. In this paper, we present the first Slovene dataset for evaluating semantic change detection systems, which contains aggregated semantic change scores for 104 target words obtained from more than 3000 manually annotated sentence pairs. We evaluate several existing semantic change detection methods on this dataset and also propose a novel approach based on optimal transport that improves on the existing state-of-the-art systems with an error reduction rate of 22.8%. 
+This research addresses the detection of semantic change in Slovene, a less-resourced Slavic language spoken by two million people. Understanding how word meanings evolve offers insight into societal and cultural shifts. We introduce the first Slovene dataset for semantic change evaluation, featuring aggregated change scores for 104 target words derived from over 3,000 manually annotated sentence pairs.
+
+We critically analyze the widely used *Average Pairwise Distance (APD)* metric and identify its limitations. As a solution, we propose a novel metric based on **regularized optimal transport**, which provides a more robust and theoretically grounded framework for quantifying semantic change. Our comprehensive evaluation of existing semantic change detection methods demonstrates that the proposed method matches or outperforms current baselines.
 
 ## Dataset
 
-The "Semantic change detection datasets for Slovenian 1.0" dataset, is publicly available at the [CLARIN.SI repository](http://hdl.handle.net/11356/1651). It represents the first Slovene dataset dedicated to the evaluation of semantic change detection. The compilation and annotative methodology behind the dataset are comprehensively detailed in our paper.
+The dataset **"Semantic change detection datasets for Slovenian 1.0"** is publicly available via the [CLARIN.SI repository](http://hdl.handle.net/11356/1651). It includes:
 
-## Reproducing the Results
+* 104 manually selected and annotated target words
+* Over 3,000 sentence pairs from two historical periods
+* Human-annotated semantic change scores
 
-To reproduce the results presented in our paper, please follow the steps outlined below:
+Detailed information on data collection, annotation, and validation is provided in the paper.
 
-1) Download the Dataset: The "Semantic change detection datasets for Slovenian 1.0" is required to be present locally to run the experiments. Visit  [CLARIN.SI repository](http://hdl.handle.net/11356/1651) to download the dataset. After downloading, unzip and extract the files alongside the notebook from this repo.
-2) Set Up Your Environment and Install Dependencies: Make sure you have a Jupyter Python environment with the packages used in the notebook (numpy, scipy, pandas, pot, torch, transformers, tqdm, thefuzz).
-3) Run Jupyter Notebook and Execute the Notebook
+## Repository Structure and Code Overview
 
-## Approach
+This repository includes scripts for preprocessing, vector extraction, and evaluation:
 
-Our approach applies optimal transport to the domain of semantic change detection. Our method systematically measures the discrepancies in word usage distributions over different time slices, thus capturing the dynamics of semantic evolution.
+* **`gigafida-extract.py`**
+  Loads the GigaFida corpus, splits it into sentences, and extracts all sentences containing a given target word from two different time periods. It outputs two files mapping each target word to a list of sentences.
 
-## How to Cite
+* **`infer-word-vectors.py`**
+  Uses the **SloBERTa** language model to obtain contextual embeddings of target words from the extracted sentences. The vectors are stored in files as mappings from words to their vector representations.
 
-To reference our paper in your academic work, please use the following citation:
+* **`benchmark-all.py`**
+  Compares various semantic change measures using the extracted vectors. It evaluates each method by computing the **Spearman's rank correlation** between predicted change scores and ground-truth rankings.
+
+## Getting Started
+
+### 1. Download the Dataset
+
+Download the dataset from the [CLARIN.SI repository](http://hdl.handle.net/11356/1651) and place the extracted contents in the root directory of this repository.
+
+### 2. Set Up the Environment
+
+Install the required Python packages:
+
+```bash
+pip install numpy scipy pandas pot torch transformers tqdm spacy lemmagen3 rapidfuzz
+```
+
+Ensure you are using some type of Python virtual environment so you do not overwrite or bloat your existing python libraries. 
+
+### 3. Run the Pipeline
+
+Some file paths might need corrections, but that should be a minor change.
+
+1. **Extract Sentences**
+
+   ```bash
+   python gigafida-extract.py
+   ```
+
+2. **Infer Word Vectors**
+
+   ```bash
+   python infer-word-vectors.py
+   ```
+
+3. **Evaluate Semantic Change Measures**
+
+   ```bash
+   python benchmark-all.py
+   ```
+
+The output will include evaluation scores and rankings for different semantic change detection methods.
+
+## Methodology Highlights
+
+Our proposed approach applies **regularized optimal transport** to compute semantic distances between word usage distributions across two time periods. This framework addresses limitations of traditional methods like average pairwise distance by accounting for word usage distribution alignment in a principled way.
+
+## Citation
+
+If you use this code or dataset in your work, please cite the following:
+
+**Paper:**
 
 ```bibtex
-@misc{pranjic2024semantic,
-      title={Semantic change detection for {S}lovene language: a novel dataset and an approach based on optimal transport}, 
+@misc{pranjić2025trackingsemanticchangeslovene,
+      title={Tracking Semantic Change in Slovene: A Novel Dataset and Optimal Transport-Based Distance}, 
       author={Marko Pranjić and Kaja Dobrovoljc and Senja Pollak and Matej Martinc},
-      year={2024},
+      year={2025},
       eprint={2402.16596},
       archivePrefix={arXiv},
-      primaryClass={cs.CL}
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2402.16596v2}
 }
 ```
 
-When utilizing the dataset, kindly include the following citation:
+**Dataset:**
 
 ```bibtex
- @misc{11356/1651,
- title = {Semantic change detection datasets for {S}lovenian 1.0},
- author = {Martinc, Matej and Dobrovoljc, Kaja and Pollak, Senja},
- url = {http://hdl.handle.net/11356/1651},
- note = {Slovenian language resource repository {CLARIN}.{SI}},
- copyright = {The {MIT} License ({MIT})},
- issn = {2820-4042},
- year = {2022} }
+@misc{11356/1651,
+  title = {Semantic change detection datasets for {S}lovenian 1.0},
+  author = {Martinc, Matej and Dobrovoljc, Kaja and Pollak, Senja},
+  url = {http://hdl.handle.net/11356/1651},
+  note = {Slovenian language resource repository {CLARIN}.{SI}},
+  copyright = {The {MIT} License ({MIT})},
+  issn = {2820-4042},
+  year = {2022}
+}
 ```
-
-Thank you for your interest in our work and for supporting reproducible research within the computational linguistics community. We look forward to seeing how our dataset and approach to semantic change detection in the Slovene language are utilized and expanded upon in future studies.
